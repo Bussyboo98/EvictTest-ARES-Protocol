@@ -77,6 +77,8 @@ The Ares Foundation governance and treasury protocol follows a strict lifecycle 
 - **Input:** proposal id from proposer or Guardian.
 - **Check:** only proposer or Guardian can cancel, proposal not yet executed.
 - **Output:** proposal status updated to `Canceled`.
+
+  
 ## Documentation
 
 - [Architecture Overview](ARCHITECTURE.md)
