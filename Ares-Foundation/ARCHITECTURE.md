@@ -1,36 +1,69 @@
-# System Architecture - Ares Foundation
+# System Architecture – Ares Foundation
 
-The Ares Foundation architecture is designed for security, modularity, and transparency. It separates core treasury logic from governance rules and utility modules.
+The Ares Foundation architecture is designed for security, modularity, and transparency. Core treasury logic is separated from governance rules and utility modules, making the system easier to audit, maintain, and upgrade. Each component has a well-defined role, ensuring that critical operations, such as fund transfers and proposal execution, are controlled and traceable.
 
-## Component Overview
+# Component Overview
+1. Core: AresTreasury
 
-### 1. Core: AresTreasury
-The central hub of the system. It holds the funds and manages the proposal state machine. It inherits from several modules to maintain a clean separation of concerns.
+The AresTreasury contract is the central hub of the system. It holds all funds, manages the proposal lifecycle, and executes approved actions. By interacting with specialized modules, it maintains a clean separation of concerns, preventing logic duplication and minimizing potential attack surfaces.
 
-### 2. Modules
-- **AuthorizationModule**: Handles EIP-712 signature verification and nonce management.
-- **ProposalModule**: Manages the storage and hashing of proposal data.
-- **TimelockModule**: Implements the queuing logic and execution delays.
-- **RewardDistributor**: An external contract (linked to the Treasury) that manages Merkle-based reward claims.
-- **GovernanceGuard**: Provides cooldowns and action limits to prevent governance exhaustion.
+2. Modules
 
-### 3. Libraries
-- **ProposalCodec**: Standardized hashing for `TreasuryAction` arrays.
-- **SignatureVerifyer**: Low-level EIP-191/EIP-712 recovery utilities.
-- **MerkleClaiming**: Efficient bit-mapped Merkle tree verification.
-- **TimelockQueuing**: Internal logic for managing execution ETAs.
+AuthorizationModule: Responsible for verifying EIP-712 signatures and managing nonces to ensure proposals are authorized and cannot be replayed.
 
-## Proposal Lifecycle
+ProposalModule: Handles the storage, hashing, and integrity checks of all proposals submitted to the treasury.
 
-1. **Propose**: A user submits a list of `TreasuryAction`s along with a Governor's EIP-712 signature.
-2. **Commit Delay**: The proposal enters a "pending" state for `COMMIT_DELAY` (1 day).
-3. **Commit**: A Governor triggers the commitment. This calculates the final `ETA` for execution.
-4. **Timelock**: The proposal must wait for the `TIMELOCK_DELAY` (2 days) to pass.
-5. **Execute**: Anyone can trigger execution if the `ETA` has passed and the proposal is within its `GRACE_PERIOD` (7 days).
-6. **Cancel**: The proposer or a Governor/Guardian can cancel the proposal at any time before execution.
+TimelockModule: Implements queuing logic and enforces execution delays, giving the community or emergency guardian time to intervene if necessary.
 
-## Permissioning Model
+RewardDistributor: An external contract linked to the treasury, responsible for Merkle-based reward distributions, enabling efficient and verifiable token allocations.
 
-- **Governors**: Can authorize proposals, commit proposals, and add/remove other governors.
-- **Emergency Guardian**: Has the power to cancel proposals but cannot authorize or execute them.
-- **Proposer**: The account that submits the proposal; can cancel their own proposal.
+GovernanceGuard: Adds cooldowns and action limits to prevent rapid, repeated changes that could jeopardize system security.
+
+3. Libraries
+
+ProposalCodec: Standardizes hashing of TreasuryAction arrays to ensure consistent proposal identification.
+
+SignatureVerifier: Provides low-level EIP-191/EIP-712 signature recovery utilities.
+
+MerkleClaiming: Verifies Merkle tree proofs efficiently for reward claims.
+
+TimelockQueuing: Supports internal logic for managing execution ETAs and delays.
+
+Proposal Lifecycle
+
+Propose – A user submits a list of TreasuryActions along with a Governor’s EIP-712 signature.
+
+Commit Delay – The proposal enters a pending state for COMMIT_DELAY (e.g., 1 day) before it can be committed.
+
+Commit – A Governor triggers commitment, calculating the final ETA for execution.
+
+Timelock – The proposal waits for TIMELOCK_DELAY (e.g., 2 days) to pass, providing oversight and intervention time.
+
+Execute – Anyone can trigger execution after the ETA, provided it occurs within the GRACE_PERIOD (e.g., 7 days).
+
+Cancel – The proposer or Emergency Guardian can cancel the proposal at any point before execution.
+
+# Permissioning Model
+
+Governors – Authorize proposals, commit them, and manage other governors.
+
+Emergency Guardian – Cancels malicious proposals but cannot authorize or execute them.
+
+Proposer – Submits proposals and may cancel their own proposals.
+
+# Security Boundaries
+
+Treasury funds can only be moved through executed proposals.
+
+Reward claims require valid Merkle proofs.
+
+Emergency Guardian can cancel proposals but cannot withdraw funds directly.
+
+# Trust Assumptions
+
+Governors are trusted to propose and approve valid actions.
+
+Users rely on the Guardian to act only in emergencies.
+
+The system depends on Ethereum network security and the immutability of deployed smart contracts.
+
