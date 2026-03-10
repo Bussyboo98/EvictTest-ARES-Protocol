@@ -29,7 +29,7 @@ MerkleClaiming: Verifies Merkle tree proofs efficiently for reward claims.
 
 TimelockQueuing: Supports internal logic for managing execution ETAs and delays.
 
-Proposal Lifecycle
+# Proposal Lifecycle
 
 Propose – A user submits a list of TreasuryActions along with a Governor’s EIP-712 signature.
 
@@ -66,4 +66,5 @@ Governors are trusted to propose and approve valid actions.
 Users rely on the Guardian to act only in emergencies.
 
 The system depends on Ethereum network security and the immutability of deployed smart contracts.
+
 
