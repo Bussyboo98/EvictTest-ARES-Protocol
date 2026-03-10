@@ -51,7 +51,32 @@ export REWARD_TOKEN=0x...
 # Run deployment script
 forge script script/DeployAresTreasury.s.sol:DeployAresTreasury --rpc-url <your_rpc_url> --broadcast
 ```
+## Protocol Specification
 
+The Ares Foundation governance and treasury protocol follows a strict lifecycle for proposals, ensuring security, transparency, and controlled execution.
+
+### a) Proposal Creation
+- **Input:** list of actions, deadline, signature from proposer.
+- **Check:** valid EIP-712 signature, proposer authorized, nonce not reused.
+- **Output:** proposal stored in treasury with `Proposed` status.
+
+### b) Approval
+- **Input:** governance key approval.
+- **Check:** proposal exists, not canceled, meets criteria.
+- **Output:** proposal status changes to `Committed`.
+
+### c) Queueing / Timelock
+- Proposal is queued and cannot execute until `TIMELOCK_DELAY` passes.
+
+### d) Execution
+- **Input:** proposal id and actions.
+- **Check:** timelock expired, proposal not canceled, actions valid.
+- **Output:** actions executed (token transfers, calls, etc.), proposal marked `Executed`.
+
+### e) Cancellation
+- **Input:** proposal id from proposer or Guardian.
+- **Check:** only proposer or Guardian can cancel, proposal not yet executed.
+- **Output:** proposal status updated to `Canceled`.
 ## Documentation
 
 - [Architecture Overview](ARCHITECTURE.md)
