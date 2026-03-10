@@ -8,13 +8,13 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract DeployAresTreasury is Script {
     function run() external {
-        // Retrieve deployment configurations from environment variables
-        // If not set, use default values for local testing or placeholder
+        /* Retrieve deployment configurations from environment variables
+         If not set, use default values for local testing or placeholder*/
         address deployer = vm.envOr("DEPLOYER_ADDRESS", msg.sender);
         address guardian = vm.envOr("EMERGENCY_GUARDIAN", deployer);
         address rewardToken = vm.envOr("REWARD_TOKEN", address(0));
         
-        // Initial governors - for deployment, we can use the deployer or a list from env
+       
         address[] memory initialGovernors = new address[](1);
         initialGovernors[0] = deployer;
 
@@ -24,7 +24,6 @@ contract DeployAresTreasury is Script {
         AresTreasury treasury = new AresTreasury(initialGovernors, guardian);
         console.log("AresTreasury deployed at:", address(treasury));
 
-        // 2. Deploy RewardDistributor (if reward token is provided)
         if (rewardToken != address(0)) {
             RewardDistributor distributor = new RewardDistributor(
                 IERC20(rewardToken), 
