@@ -18,6 +18,8 @@ struct TreasuryAction {
 
 interface IAresTreasury {
 
+
+
     struct Proposal {
         address proposer;
         uint256 executeAfter;

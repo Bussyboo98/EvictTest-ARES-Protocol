@@ -1,0 +1,3 @@
+[submodule "Ares-Foundation/lib/openzeppelin-contracts"]
+	path = Ares-Foundation/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts

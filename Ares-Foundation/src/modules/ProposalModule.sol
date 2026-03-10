@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "../Libraries/ProposalCodec.sol";
-import "../Interface/IAresTreasury.sol";
+import "../libraries/ProposalCodec.sol";
+import "../interface/IAresTreasury.sol";
 
 abstract contract ProposalModule {
 
