@@ -1,66 +1,62 @@
-## Foundry
+# Ares Foundation
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Ares Foundation is a secure, modular treasury and governance system built on Ethereum. It features a multi-stage proposal lifecycle, EIP-712 signature-authorized proposals, and a timelock-protected execution mechanism.
 
-Foundry consists of:
+## Core Features
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- **Authorized Proposing**: Proposals require a valid EIP-712 signature from an authorized Governor.
+- **Multi-Stage Lifecycle**: Proposals progress through `Proposed` -> `Committed` -> `Queued` -> `Executed`.
+- **Integrated Timelock**: Mandatory delays between proposal commitment and execution to ensure community oversight.
+- **Reward Distribution**: Integrated Merkle-based reward distribution system for efficient token allocations.
+- **Emergency Controls**: A dedicated Emergency Guardian can cancel malicious or erroneous proposals.
+
+## Tech Stack
+
+- **Solidity**: ^0.8.20
+- **Framework**: [Foundry](https://book.getfoundry.sh/)
+- **Libraries**: OpenZeppelin Contracts
+
+## Getting Started
+
+### Prerequisites
+
+- [Foundry](https://getfoundry.sh/)
+
+### Installation
+
+```bash
+git clone <repository-url>
+cd Ares-Foundation
+forge install
+```
+
+### Testing
+
+Run the comprehensive test suite:
+
+```bash
+forge test
+```
+
+### Deployment
+
+To deploy to a network, set up your environment variables and use the deployment script:
+
+```bash
+# Set environment variables
+export DEPLOYER_ADDRESS=0x...
+export EMERGENCY_GUARDIAN=0x...
+export REWARD_TOKEN=0x...
+
+# Run deployment script
+forge script script/DeployAresTreasury.s.sol:DeployAresTreasury --rpc-url <your_rpc_url> --broadcast
+```
 
 ## Documentation
 
-https://book.getfoundry.sh/
+- [Architecture Overview](ARCHITECTURE.md)
+- [Security Model](SECURITY.md)
 
-## Usage
+## License
 
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+MIT
